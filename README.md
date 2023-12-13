@@ -14,9 +14,6 @@
 <a href="https://github.com/zetrodeploy/Kiara-X-Music"> <img src="https://img.shields.io/github/last-commit/zetrodeploy/Kiara-X-Music?color=blue&logo=github&logoColor=green&style=for-the-badge" /></a>
 </p>
 
-<p align="center">
-  <img src="https://telegra.ph/file/36be820a8775f0bfc773e.jpg">
-</p>
 
 <h3 align="center">
     ─「 ᴅᴇᴩʟᴏʏ ᴏɴ ʜᴇʀᴏᴋᴜ 」─
