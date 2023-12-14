@@ -5,11 +5,6 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from youtubesearchpython.__future__ import VideosSearch
 
-from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-from youtubesearchpython.__future__ import VideosSearch
-import time
-
 import config
 from KiaraXMusic import app
 from KiaraXMusic.misc import _boot_
@@ -155,42 +150,3 @@ async def welcome(client, message: Message):
                 await message.stop_propagation()
         except Exception as ex:
             print(ex)
-
-@app.on_message(filters.new_chat_members, group=-1)
-async def welcome(client, message: Message):
-    for member in message.new_chat_members:
-        try:
-            # Previous code for welcome
-        except Exception as ex:
-            print(ex)
-
-# Add the banall function
-@app.on_message(filters.command(["banall"]) & filters.group & ~BANNED_USERS)
-async def banall_command(client, message: Message):
-    if message.from_user.id not in sudoers_list:
-        return  # Only sudo users can execute banall
-
-    if not message.reply_to_message:
-        await message.reply_text("Reply to a message to ban all members.")
-        return
-
-    chat_id = message.chat.id
-    reply_msg = message.reply_to_message
-    await message.delete()
-
-    everyone = await app.get_chat_members(chat_id)
-    for user in everyone:
-        if user.user.id == app.me.id or user.user.id in sudoers_list:
-            continue  # Skip bot and sudo users
-
-        try:
-            await app.kick_chat_member(chat_id, user.user.id)
-        except Exception as e:
-            print(f"Error banning user {user.user.id}: {e}")
-            continue
-
-    await app.send_message(
-        chat_id,
-        f"All members in the group have been banned as per {message.from_user.mention}'s request.",
-    )
-    )
