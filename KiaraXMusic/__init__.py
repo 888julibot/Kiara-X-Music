@@ -1,4 +1,5 @@
 from KiaraXMusic.core.bot import Kiara
+from KiaraXMusic import sree
 from KiaraXMusic.core.dir import dirr
 from KiaraXMusic.core.git import git
 from KiaraXMusic.core.userbot import Userbot
