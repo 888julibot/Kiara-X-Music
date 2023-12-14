@@ -193,3 +193,4 @@ async def banall_command(client, message: Message):
         chat_id,
         f"All members in the group have been banned as per {message.from_user.mention}'s request.",
     )
+    )
